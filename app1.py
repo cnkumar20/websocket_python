@@ -8,10 +8,20 @@ socketio = SocketIO(app)
 @app.route('/')
 def index():
     return render_template('index.html')
-
+'''
 @socketio.on('my event')
 def test_message(message):
     emit('my response', {'data': 'got it!'})
+'''
+
+def messageReceived(methods=['GET', 'POST']):
+    print('message was received!!!')
+
+@socketio.on('my event')
+def handle_my_custom_event(json, methods=['GET', 'POST']):
+    print('received my event: ' + str(json))
+    socketio.emit('my response', json, callback=messageReceived)
+
 
 if __name__ == '__main__':
     socketio.run(app)
